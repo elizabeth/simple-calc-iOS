@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var equation: UITextView!
     @IBOutlet weak var calculated: UITextView!
     var input = ""
+    var num = "0"
     var rpn = false
     
     override func viewDidLoad() {
@@ -40,7 +41,14 @@ class ViewController: UIViewController {
         self.calculated.text = "math"
     }
     
+    @IBAction func decimal(_ sender: AnyObject) {
+        num = num + "."
+    }
     
+    @IBAction func number(_ sender: AnyObject) {
+        self.calculated.text = sender.titleLabel!?.text
+        print(sender.titleLabel!?.text)
+    }
     
 //    @IBAction func addItem(_ sender: AnyObject) {
 //        self.dismiss(animated: true, completion: nil)
