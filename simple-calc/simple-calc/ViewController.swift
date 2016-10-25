@@ -120,7 +120,7 @@ class ViewController: UIViewController {
                 }
                 
                 numArray.append(Double(num)!)
-                calculatedNum = Double(num)!
+                calculatedNum = Double(numArray.count)
                 displayResult()
             case "avg":
                 mathOp = "avg"
@@ -208,21 +208,16 @@ class ViewController: UIViewController {
                     calculatedNum = calculatedNum.truncatingRemainder(dividingBy: numArray[i])
                 }
             case "count":
-                if (num != "") {
-                    numArray.append(Double(num)!)
-                }
                 calculatedNum = Double(numArray.count)
             case "avg":
-                if (num != "") {
-                    numArray.append(Double(num)!)
-                }
-                
                 if (numArray.count > 0) {
                     calculatedNum = (numArray.reduce(0, +)) / Double(numArray.count)
                 }
             default:
                 print("Error. Please try again")
             }
+            numArray.removeAll()
+            numArray.append(calculatedNum)
         } else {
             switch mathOp {
             case "+":
@@ -250,7 +245,7 @@ class ViewController: UIViewController {
         }
         
         mathOp = ""
-        numArray.removeAll()
+        
         displayResult()
     }
     
