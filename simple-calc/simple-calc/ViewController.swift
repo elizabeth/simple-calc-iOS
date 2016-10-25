@@ -44,12 +44,17 @@ class ViewController: UIViewController {
     
     @IBAction func switchRPN(_ sender: AnyObject) {
         rpn = !rpn
-        if (rpn) {
+        if rpn {
+            if calculatedNum != 0.0 {
+                numArray.append(calculatedNum)
+            }
+            
             rpnButton.backgroundColor = UIColor(red: (236/255.0), green: (126/255.0), blue: (189/255.0), alpha: 1.0)
             rpnButton.setTitleColor(UIColor.white, for: .normal)
         } else {
             rpnButton.backgroundColor = UIColor(red: (190/255.0), green: (191/255.0), blue: (193/255.0), alpha: 1.0)
             rpnButton.setTitleColor(self.view.tintColor, for: .normal)
+            numArray.removeAll()
         }
     }
     
@@ -58,8 +63,10 @@ class ViewController: UIViewController {
     
         let op = (sender.titleLabel!?.text)!
         
-        if (rpn) {
-        
+        if rpn {
+            mathOp = op
+            calculate()
+            numArray.removeAll()
         } else {
             if (mathOp == "" && num != "") {
                 calculatedNum = Double(num)!
@@ -75,18 +82,43 @@ class ViewController: UIViewController {
     }
     
     @IBAction func multiOperation(_ sender: AnyObject) {
-        let op = sender.titleLabel!?.text
+        let op = (sender.titleLabel!?.text)!
         
-        if (rpn) {
-            
+        if rpn {
+            if op != "fact" {
+                mathOp = op
+                calculate()
+            } else {
+                if (num != "") {
+                    calculatedNum = Double(num)!
+                }
+                
+                let factNum: Int? = Int(calculatedNum)
+                
+                if factNum == nil{
+                    print("Factorial number must be an integer")
+                } else if factNum == 0 {
+                    calculatedNum = 1
+                } else {
+                    var result = factNum!
+                    var temp = factNum! - 1
+                    while temp > 0 {
+                        result = result * temp
+                        temp = temp - 1
+                    }
+                    
+                    calculatedNum = Double(result)
+                }
+                displayResult()
+            }
         } else {
-            
-            switch op! {
+            switch op {
             case "count":
                 mathOp = "count"
                 if (num == "") {
                     num = String(calculatedNum)
                 }
+                
                 numArray.append(Double(num)!)
                 calculatedNum = Double(num)!
                 displayResult()
@@ -128,25 +160,93 @@ class ViewController: UIViewController {
     }
     
     func calculate() {
-        switch mathOp {
-        case "+":
-            calculatedNum += Double(num)!
-        case "-":
-            calculatedNum -= Double(num)!
-        case "×":
-            calculatedNum = calculatedNum * Double(num)!
-        case "÷":
-            calculatedNum = calculatedNum / Double(num)!
-        case "%":
-            calculatedNum = calculatedNum.truncatingRemainder(dividingBy: Double(num)!)
-        case "count":
-            numArray.append(Double(num)!)
-            calculatedNum = Double(numArray.count)
-        case "avg":
-            numArray.append(Double(num)!)
-            calculatedNum = (numArray.reduce(0, +)) / Double(numArray.count)
-        default:
-            print("Error. Please try again")
+        if rpn {
+            if num != "" {
+                numArray.append(Double(num)!)
+            }
+            
+            switch mathOp {
+            case "+":
+                for number in numArray {
+                    calculatedNum += number
+                }
+            case "-":
+                let count = numArray.count
+                if count > 0 && count != 1{
+                    calculatedNum = numArray[0]
+                }
+                
+                if count == 1 {
+                    calculatedNum = calculatedNum - numArray[0]
+                }
+                
+                if count > 1 {
+                    for i in 1..<count {
+                        calculatedNum -= numArray[i]
+                    }
+                }
+            case "×":
+                for number in numArray {
+                    calculatedNum = calculatedNum * number
+                }
+            case "÷":
+                let count = numArray.count
+                if count > 0 {
+                    calculatedNum = numArray[0]
+                }
+                if count > 1 {
+                    for i in 1..<count {
+                        calculatedNum = calculatedNum / numArray[i]
+                    }
+                }
+            case "%":
+                let count = numArray.count
+                if count > 0 {
+                    calculatedNum = numArray[0]
+                }
+                for i in 1..<count {
+                    calculatedNum = calculatedNum.truncatingRemainder(dividingBy: numArray[i])
+                }
+            case "count":
+                if (num != "") {
+                    numArray.append(Double(num)!)
+                }
+                calculatedNum = Double(numArray.count)
+            case "avg":
+                if (num != "") {
+                    numArray.append(Double(num)!)
+                }
+                
+                if (numArray.count > 0) {
+                    calculatedNum = (numArray.reduce(0, +)) / Double(numArray.count)
+                }
+            default:
+                print("Error. Please try again")
+            }
+        } else {
+            switch mathOp {
+            case "+":
+                calculatedNum += Double(num)!
+            case "-":
+                calculatedNum -= Double(num)!
+            case "×":
+                calculatedNum = calculatedNum * Double(num)!
+            case "÷":
+                calculatedNum = calculatedNum / Double(num)!
+            case "%":
+                calculatedNum = calculatedNum.truncatingRemainder(dividingBy: Double(num)!)
+            case "count":
+                numArray.append(Double(num)!)
+                calculatedNum = Double(numArray.count)
+            case "avg":
+                numArray.append(Double(num)!)
+                calculatedNum = (numArray.reduce(0, +)) / Double(numArray.count)
+            default:
+                if (num != "") {
+                    calculatedNum = Double(num)!
+                }
+                print("Error. Please try again")
+            }
         }
         
         mathOp = ""
@@ -155,9 +255,12 @@ class ViewController: UIViewController {
     }
     
     @IBAction func equals(_ sender: AnyObject) {
-        
-        if (rpn) {
-            
+        if rpn {
+            if (num != "") {
+                calculatedNum = Double(num)!
+                numArray.append(Double(num)!)
+                displayResult()
+            }
         } else {
             if (num != "") {
                 calculate()
