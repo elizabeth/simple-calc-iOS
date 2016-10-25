@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var rpnButton: UIButton!
     var num = ""
     var calculatedNum = 0.0
+    var numArray = [Double]()
     var mathOp = ""
     var rpn = false
     var rpnNum = [Double]()
@@ -36,6 +37,7 @@ class ViewController: UIViewController {
     @IBAction func clearCalc(_ sender: AnyObject) {
         num = ""
         mathOp = ""
+        numArray.removeAll()
         calculatedNum = 0.0
         self.calculated.text = "0"
     }
@@ -63,7 +65,7 @@ class ViewController: UIViewController {
                 calculatedNum = Double(num)!
             }
             
-            if (mathOp != "") {
+            if (mathOp != "" && num != "") {
                 calculate()
             }
             
@@ -78,16 +80,33 @@ class ViewController: UIViewController {
         if (rpn) {
             
         } else {
+            
             switch op! {
             case "count":
-                num = ""
+                mathOp = "count"
+                if (num == "") {
+                    num = String(calculatedNum)
+                }
+                numArray.append(Double(num)!)
+                calculatedNum = Double(num)!
+                displayResult()
             case "avg":
-                num = ""
+                mathOp = "avg"
+                if (num == "") {
+                    num = String(calculatedNum)
+                }
+                numArray.append(Double(num)!)
+                calculatedNum = Double(num)!
+                displayResult()
             case "fact":
-                let factNum: Int? = Int(num)
+                if (num != "") {
+                    calculatedNum = Double(num)!
+                }
+                
+                let factNum: Int? = Int(calculatedNum)
+                
                 if factNum == nil{
                     print("Factorial number must be an integer")
-                    calculatedNum = 0
                 } else if factNum == 0 {
                     calculatedNum = 1
                 } else {
@@ -120,11 +139,18 @@ class ViewController: UIViewController {
             calculatedNum = calculatedNum / Double(num)!
         case "%":
             calculatedNum = calculatedNum.truncatingRemainder(dividingBy: Double(num)!)
+        case "count":
+            numArray.append(Double(num)!)
+            calculatedNum = Double(numArray.count)
+        case "avg":
+            numArray.append(Double(num)!)
+            calculatedNum = (numArray.reduce(0, +)) / Double(numArray.count)
         default:
             print("Error. Please try again")
         }
         
         mathOp = ""
+        numArray.removeAll()
         displayResult()
     }
     
@@ -133,7 +159,9 @@ class ViewController: UIViewController {
         if (rpn) {
             
         } else {
-            calculate()
+            if (num != "") {
+                calculate()
+            }
         }
 
     }
