@@ -309,8 +309,10 @@ class ViewController: UIViewController {
     }
     
     @IBAction func decimal(_ sender: AnyObject) {
-        num = num + "."
-        self.calculated.text = num
+        if !num.contains(".") {
+            num = num + "."
+            self.calculated.text = num
+        }
     }
     
     @IBAction func number(_ sender: AnyObject) {
