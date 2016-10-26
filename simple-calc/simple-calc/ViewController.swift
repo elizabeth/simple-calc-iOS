@@ -32,6 +32,12 @@ class ViewController: UIViewController {
     func displayResult() {
         num = ""
         self.calculated.text = String(calculatedNum)
+        
+        if calculatedNum.isNaN || calculatedNum.isInfinite {
+            mathOp = ""
+            numArray.removeAll()
+            calculatedNum = 0.0
+        }
     }
     
     @IBAction func clearCalc(_ sender: AnyObject) {
@@ -95,7 +101,7 @@ class ViewController: UIViewController {
                 let factNum: Int? = Int(calculatedNum)
                 
                 if factNum == nil{
-                    print("Factorial number must be an integer")
+                    calculatedNum = Double.nan
                 } else if factNum == 0 {
                     calculatedNum = 1
                 } else {
@@ -111,48 +117,52 @@ class ViewController: UIViewController {
                 displayResult()
             }
         } else {
-            switch op {
-            case "count":
-                mathOp = "count"
-                if (num == "") {
-                    num = String(calculatedNum)
-                }
-                
-                numArray.append(Double(num)!)
-                calculatedNum = Double(num)!
-                displayResult()
-            case "avg":
-                mathOp = "avg"
-                if (num == "") {
-                    num = String(calculatedNum)
-                }
-                numArray.append(Double(num)!)
-                calculatedNum = Double(num)!
-                displayResult()
-            case "fact":
-                if (num != "") {
-                    calculatedNum = Double(num)!
-                }
-                
-                let factNum: Int? = Int(calculatedNum)
-                
-                if factNum == nil{
-                    print("Factorial number must be an integer")
-                } else if factNum == 0 {
-                    calculatedNum = 1
-                } else {
-                    var result = factNum!
-                    var temp = factNum! - 1
-                    while temp > 0 {
-                        result = result * temp
-                        temp = temp - 1
+            if mathOp == "" || mathOp == op {
+                switch op {
+                case "count":
+                    mathOp = "count"
+                    if (num == "") {
+                        num = String(calculatedNum)
                     }
                     
-                    calculatedNum = Double(result)
+                    numArray.append(Double(num)!)
+                    calculatedNum = Double(num)!
+                    displayResult()
+                case "avg":
+                    mathOp = "avg"
+                    if (num == "") {
+                        num = String(calculatedNum)
+                    }
+                    numArray.append(Double(num)!)
+                    calculatedNum = Double(num)!
+                    displayResult()
+                case "fact":
+                    if (num != "") {
+                        calculatedNum = Double(num)!
+                    }
+                    
+                    let factNum: Int? = Int(calculatedNum)
+                    
+                    if factNum == nil{
+                        calculatedNum = Double.nan
+                    } else if factNum == 0 {
+                        calculatedNum = 1
+                    } else {
+                        var result = factNum!
+                        var temp = factNum! - 1
+                        while temp > 0 {
+                            result = result * temp
+                            temp = temp - 1
+                        }
+                        
+                        calculatedNum = Double(result)
+                    }
+                default:
+                    calculatedNum = Double.nan
+                    break
                 }
-            default:
-                print("Error")
-                break
+            } else {
+                calculatedNum = Double.nan
             }
             displayResult()
         }
@@ -238,10 +248,13 @@ class ViewController: UIViewController {
                     calculatedNum = (numArray.reduce(0, +)) / Double(numArray.count)
                 }
             default:
-                print("Error. Please try again")
+                calculatedNum = Double.nan
             }
+            
             numArray.removeAll()
-            numArray.append(calculatedNum)
+            if !calculatedNum.isNaN {
+                numArray.append(calculatedNum)
+            }
         } else {
             switch mathOp {
             case "+":
@@ -257,19 +270,17 @@ class ViewController: UIViewController {
             case "count":
                 numArray.append(Double(num)!)
                 calculatedNum = Double(numArray.count)
+                numArray.removeAll()
             case "avg":
                 numArray.append(Double(num)!)
                 calculatedNum = (numArray.reduce(0, +)) / Double(numArray.count)
+                numArray.removeAll()
             default:
-                if (num != "") {
-                    calculatedNum = Double(num)!
-                }
-                print("Error. Please try again")
+                calculatedNum = Double(num)!
             }
         }
         
         mathOp = ""
-        
         displayResult()
     }
     
@@ -283,9 +294,18 @@ class ViewController: UIViewController {
         } else {
             if (num != "") {
                 calculate()
+            } else if (mathOp == "count") {
+                calculatedNum = Double(numArray.count)
+                mathOp = ""
+                numArray.removeAll()
+                displayResult()
+            } else if (mathOp == "avg") {
+                calculatedNum = (numArray.reduce(0, +)) / Double(numArray.count)
+                mathOp = ""
+                numArray.removeAll()
+                displayResult()
             }
         }
-
     }
     
     @IBAction func decimal(_ sender: AnyObject) {
