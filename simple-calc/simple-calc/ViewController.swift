@@ -66,7 +66,6 @@ class ViewController: UIViewController {
         if rpn {
             mathOp = op
             calculate()
-            numArray.removeAll()
         } else {
             if (mathOp == "" && num != "") {
                 calculatedNum = Double(num)!
