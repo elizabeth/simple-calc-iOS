@@ -193,6 +193,7 @@
 				TargetAttributes = {
 					9D9541F81DBAB0B7001DE30D = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 9Z2Z596GJL;
 						ProvisioningStyle = Automatic;
 					};
 					9D95420C1DBAB0B7001DE30D = {
@@ -412,6 +413,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 9Z2Z596GJL;
 				INFOPLIST_FILE = "simple-calc/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -426,6 +428,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 9Z2Z596GJL;
 				INFOPLIST_FILE = "simple-calc/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -509,6 +512,7 @@
 				9D9542231DBAB0B7001DE30D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9D9542241DBAB0B7001DE30D /* Build configuration list for PBXNativeTarget "simple-calcTests" */ = {
 			isa = XCConfigurationList;
@@ -517,6 +521,7 @@
 				9D9542261DBAB0B7001DE30D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9D9542271DBAB0B7001DE30D /* Build configuration list for PBXNativeTarget "simple-calcUITests" */ = {
 			isa = XCConfigurationList;
@@ -525,6 +530,7 @@
 				9D9542291DBAB0B7001DE30D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

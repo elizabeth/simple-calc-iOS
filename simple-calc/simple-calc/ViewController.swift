@@ -120,7 +120,7 @@ class ViewController: UIViewController {
                 }
                 
                 numArray.append(Double(num)!)
-                calculatedNum = Double(numArray.count)
+                calculatedNum = Double(num)!
                 displayResult()
             case "avg":
                 mathOp = "avg"
@@ -167,8 +167,19 @@ class ViewController: UIViewController {
             
             switch mathOp {
             case "+":
-                for number in numArray {
-                    calculatedNum += number
+                let count = numArray.count
+                if count > 0 && count != 1{
+                    calculatedNum = numArray[0]
+                }
+                
+                if count == 1 {
+                    calculatedNum = calculatedNum + numArray[0]
+                }
+                
+                if count > 1 {
+                    for i in 1..<count {
+                        calculatedNum += numArray[i]
+                    }
                 }
             case "-":
                 let count = numArray.count
@@ -186,8 +197,17 @@ class ViewController: UIViewController {
                     }
                 }
             case "×":
-                for number in numArray {
-                    calculatedNum = calculatedNum * number
+                let count = numArray.count
+                if count > 0 {
+                    calculatedNum = numArray[0]
+                }
+                
+                if count == 1 {
+                    calculatedNum = calculatedNum * numArray[0]
+                }
+                
+                for i in 1..<count {
+                    calculatedNum = calculatedNum * numArray[i]
                 }
             case "÷":
                 let count = numArray.count
@@ -204,6 +224,11 @@ class ViewController: UIViewController {
                 if count > 0 {
                     calculatedNum = numArray[0]
                 }
+                
+                if count == 1 {
+                    calculatedNum = calculatedNum / numArray[0]
+                }
+                
                 for i in 1..<count {
                     calculatedNum = calculatedNum.truncatingRemainder(dividingBy: numArray[i])
                 }
